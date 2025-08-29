@@ -11,8 +11,14 @@ import FilterCharacters from "./FilterCharacters"
 import { AiFillHeart } from "react-icons/ai"
 
 const NavigationBar: React.FC = () => {
-  const { characters, setShowFilter, showFilter, filteredCharacter, filteredSpecie } =
-    useCharacters()
+  const {
+    characters,
+    setCharacters,
+    setShowFilter,
+    showFilter,
+    filteredCharacter,
+    filteredSpecie,
+  } = useCharacters()
 
   // Memoized filter calculations
   const memoizedCharacters = useMemo(() => {
@@ -21,18 +27,41 @@ const NavigationBar: React.FC = () => {
         filteredCharacter && filteredCharacter === "all"
           ? !char.starred
           : filteredCharacter === "others"
-          ? true
+          ? !char.starred
           : filteredCharacter === "starred" && char.starred
       const matchesSpecies =
         filteredSpecie && filteredSpecie !== "all"
           ? char.species.toLowerCase().includes(filteredSpecie.toLowerCase())
-          : true
+          : !char.starred
+      return matchesName && matchesSpecies
+    })
+  }, [characters, filteredCharacter, filteredSpecie])
+
+  // Memoized filter calculations
+  const memoizedFavouriteCharacters = useMemo(() => {
+    return characters.filter((char) => {
+      const matchesName =
+        filteredCharacter && filteredCharacter === "all"
+          ? char.starred
+          : filteredCharacter === "others"
+          ? !char.starred
+          : filteredCharacter === "starred" && char.starred
+      const matchesSpecies =
+        filteredSpecie && filteredSpecie !== "all"
+          ? char.species.toLowerCase().includes(filteredSpecie.toLowerCase())
+          : char.starred
       return matchesName && matchesSpecies
     })
   }, [characters, filteredCharacter, filteredSpecie])
 
   const onClickFilter = () => {
     setShowFilter(!showFilter)
+  }
+
+  const onHandleFavorite = (id: string) => {
+    setCharacters(
+      characters.map((char) => (char.id === id ? { ...char, starred: !char.starred } : char))
+    )
   }
 
   return (
@@ -54,37 +83,82 @@ const NavigationBar: React.FC = () => {
         <FilterCharacters />
       </div>
       <ul className="p-4 grid grid-cols-6 gap-3 overflow-auto max-h-[calc(100svh-180px)]">
-        <li className="col-span-6 h-[56px] flex justify-start items-center pl-5">
-          <p className="text-xs leading-4 uppercase text-gray-500 tracking-[5%]">
-            Characters ({memoizedCharacters.length})
-          </p>
-        </li>
-        {memoizedCharacters.map((char: Character) => (
-          <li className="col-span-6 grid grid-cols-6 border-t pt-2 h-[74px]" key={char.id}>
-            <div className="col-span-1 flex items-center justify-center">
-              <Image
-                className="rounded-3xl"
-                src={char.image}
-                alt={char.name}
-                width={32}
-                height={32}
-              />
-            </div>
-            <div className="flex items-center justify-start col-span-4">
-              <div className="flex flex-col">
-                <p className="text-gray-900 font-bold">{char.name}</p>
-                <p className="text-gray-500">{char.species}</p>
-              </div>
-            </div>
-            <div className="col-span-1 flex justify-center items-center">
-              {char.starred ? (
-                <AiFillHeart className="text-4xl text-[#53C629] bg-white rounded-3xl p-1" />
-              ) : (
-                <FiHeart className="text-2xl" />
-              )}
-            </div>
-          </li>
-        ))}
+        {memoizedFavouriteCharacters.length > 0 && (
+          <>
+            <li className="col-span-6 h-[56px] flex justify-start items-center pl-5">
+              <p className="text-xs leading-4 uppercase text-gray-500 tracking-[5%]">
+                Starred Characters ({memoizedFavouriteCharacters.length})
+              </p>
+            </li>
+            {memoizedFavouriteCharacters.map((char: Character) => (
+              <li className="col-span-6 grid grid-cols-6 border-t pt-2 h-[74px]" key={char.id}>
+                <div className="col-span-1 flex items-center justify-center">
+                  <Image
+                    className="rounded-3xl"
+                    src={char.image}
+                    alt={char.name}
+                    width={32}
+                    height={32}
+                  />
+                </div>
+                <div className="flex items-center justify-start col-span-4">
+                  <div className="flex flex-col">
+                    <p className="text-gray-900 font-bold">{char.name}</p>
+                    <p className="text-gray-500">{char.species}</p>
+                  </div>
+                </div>
+                <div className="col-span-1 flex justify-center items-center">
+                  {char.starred ? (
+                    <AiFillHeart
+                      className="text-4xl text-[#53C629] bg-white rounded-3xl p-1"
+                      onClick={() => onHandleFavorite(char.id)}
+                    />
+                  ) : (
+                    <FiHeart className="text-2xl" onClick={() => onHandleFavorite(char.id)} />
+                  )}
+                </div>
+              </li>
+            ))}
+          </>
+        )}
+        {memoizedCharacters.length > 0 && (
+          <>
+            <li className="col-span-6 h-[56px] flex justify-start items-center pl-5">
+              <p className="text-xs leading-4 uppercase text-gray-500 tracking-[5%]">
+                Characters ({memoizedCharacters.length})
+              </p>
+            </li>
+            {memoizedCharacters.map((char: Character) => (
+              <li className="col-span-6 grid grid-cols-6 border-t pt-2 h-[74px]" key={char.id}>
+                <div className="col-span-1 flex items-center justify-center">
+                  <Image
+                    className="rounded-3xl"
+                    src={char.image}
+                    alt={char.name}
+                    width={32}
+                    height={32}
+                  />
+                </div>
+                <div className="flex items-center justify-start col-span-4">
+                  <div className="flex flex-col">
+                    <p className="text-gray-900 font-bold">{char.name}</p>
+                    <p className="text-gray-500">{char.species}</p>
+                  </div>
+                </div>
+                <div className="col-span-1 flex justify-center items-center">
+                  {char.starred ? (
+                    <AiFillHeart
+                      className="text-4xl text-[#53C629] bg-white rounded-3xl p-1"
+                      onClick={() => onHandleFavorite(char.id)}
+                    />
+                  ) : (
+                    <FiHeart className="text-2xl" onClick={() => onHandleFavorite(char.id)} />
+                  )}
+                </div>
+              </li>
+            ))}
+          </>
+        )}
       </ul>
     </nav>
   )
