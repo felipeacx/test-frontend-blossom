@@ -5,11 +5,18 @@ export interface Character {
   species: string
   status: string
   gender: string
+  starred?: boolean
 }
 
 export interface CharactersContextType {
   characters: Character[]
   setCharacters: (chars: Character[]) => void
+  showFilter: boolean
+  setShowFilter: (show: boolean) => void
+  filteredCharacter: string
+  setFilteredCharacter: (filter: string) => void
+  filteredSpecie: string
+  setFilteredSpecie: (specie: string) => void
 }
 
 export interface CharactersResponse {
