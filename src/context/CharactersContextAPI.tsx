@@ -7,8 +7,23 @@ const CharactersContext = createContext<CharactersContextType | undefined>(undef
 
 export const CharactersProvider = ({ children }: { children: ReactNode }) => {
   const [characters, setCharacters] = useState<Character[]>([])
+  const [showFilter, setShowFilter] = useState(false)
+  const [filteredCharacter, setFilteredCharacter] = useState<string>("all")
+  const [filteredSpecie, setFilteredSpecie] = useState<string>("all")
+
   return (
-    <CharactersContext.Provider value={{ characters, setCharacters }}>
+    <CharactersContext.Provider
+      value={{
+        characters,
+        setCharacters,
+        showFilter,
+        setShowFilter,
+        filteredCharacter,
+        setFilteredCharacter,
+        filteredSpecie,
+        setFilteredSpecie,
+      }}
+    >
       {children}
     </CharactersContext.Provider>
   )
