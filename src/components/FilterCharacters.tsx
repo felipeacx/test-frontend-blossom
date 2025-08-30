@@ -1,8 +1,15 @@
 import { useCharacters } from "@/context/CharactersContextAPI"
 
 const FilterCharacters = () => {
-  const { showFilter, filteredCharacter, filteredSpecie, setFilteredCharacter, setFilteredSpecie } =
-    useCharacters()
+  const {
+    showFilter,
+    filteredCharacter,
+    filteredSpecie,
+    setFilteredCharacter,
+    setFilteredSpecie,
+    sortBy,
+    setSortBy,
+  } = useCharacters()
 
   const onClickCharacterFilter = (filter: string) => {
     setFilteredCharacter(filter)
@@ -16,6 +23,36 @@ const FilterCharacters = () => {
     <>
       {showFilter && (
         <div className="absolute bg-white rounded-b shadow-lg rounded rounded-t-none p-4 w-full">
+          <p className="text-gray-500 text-sm leading-5">Sort By</p>
+          <div className="grid grid-cols-3 gap-3 py-3">
+            <button
+              className={
+                "border rounded-lg px-2 py-4" +
+                (sortBy === "" && " bg-primary-100 text-primary-600 border-primary-100")
+              }
+              onClick={() => setSortBy("")}
+            >
+              Default
+            </button>
+            <button
+              className={
+                "border rounded-lg px-2 py-4" +
+                (sortBy === "A-Z" && " bg-primary-100 text-primary-600 border-primary-100")
+              }
+              onClick={() => setSortBy("A-Z")}
+            >
+              A-Z
+            </button>
+            <button
+              className={
+                "border rounded-lg px-2 py-4" +
+                (sortBy === "Z-A" && " bg-primary-100 text-primary-600 border-primary-100")
+              }
+              onClick={() => setSortBy("Z-A")}
+            >
+              Z-A
+            </button>
+          </div>
           <p className="text-gray-500 text-sm leading-5">Character</p>
           <div className="grid grid-cols-3 gap-3 py-3">
             <button

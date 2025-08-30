@@ -21,6 +21,8 @@ export interface CharactersContextType {
   setSelectedCharacter: (id: string | null) => void
   filterResult: string
   setFilterResult: (result: string) => void
+  sortBy: string
+  setSortBy: (sort: string) => void
 }
 
 export interface CharactersResponse {
