@@ -26,3 +26,7 @@ export interface CharactersContextType {
 export interface CharactersResponse {
   characters: { results: Character[] }
 }
+
+export interface DetailedViewProps {
+  id?: string | string[]
+}
