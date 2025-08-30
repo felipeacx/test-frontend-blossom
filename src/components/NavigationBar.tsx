@@ -9,8 +9,10 @@ import { PiSliders } from "react-icons/pi"
 import { FiHeart } from "react-icons/fi"
 import FilterCharacters from "./FilterCharacters"
 import { AiFillHeart } from "react-icons/ai"
+import { useRouter } from "next/navigation"
 
 const NavigationBar: React.FC = () => {
+  const router = useRouter()
   const {
     characters,
     setCharacters,
@@ -21,6 +23,7 @@ const NavigationBar: React.FC = () => {
     filterResult,
     setFilterResult,
     setSelectedCharacter,
+    selectedCharacter,
   } = useCharacters()
 
   // Memoized filter for non-starred characters
@@ -32,7 +35,7 @@ const NavigationBar: React.FC = () => {
           ? isNotStarred
           : filteredCharacter === "starred"
           ? false
-          : filteredCharacter === "others" && false
+          : filteredCharacter === "others" && isNotStarred
       const matchesSpecies =
         filteredSpecie !== "all"
           ? char.species.toLowerCase().includes(filteredSpecie.toLowerCase())
@@ -75,6 +78,7 @@ const NavigationBar: React.FC = () => {
 
   const onClickCharacter = (id: string) => {
     setSelectedCharacter(id)
+    router.push(`/${id}`)
   }
 
   const filterCount =
@@ -127,7 +131,13 @@ const NavigationBar: React.FC = () => {
               </p>
             </li>
             {memoizedFavouriteCharacters.map((char: Character) => (
-              <li className="col-span-6 grid grid-cols-6 border-t pt-2 h-[74px]" key={char.id}>
+              <li
+                className={
+                  "col-span-6 grid grid-cols-6 border-t py-2 h-[74px] " +
+                  (selectedCharacter === char.id ? "bg-primary-100 rounded-lg" : "")
+                }
+                key={char.id}
+              >
                 <div
                   className="col-span-1 flex items-center justify-center cursor-pointer"
                   onClick={() => onClickCharacter(char.id)}
@@ -171,7 +181,13 @@ const NavigationBar: React.FC = () => {
               </p>
             </li>
             {memoizedCharacters.map((char: Character) => (
-              <li className="col-span-6 grid grid-cols-6 border-t pt-2 h-[74px]" key={char.id}>
+              <li
+                className={
+                  "col-span-6 grid grid-cols-6 border-t py-2 h-[74px] " +
+                  (selectedCharacter === char.id ? "bg-primary-100 rounded-lg" : "")
+                }
+                key={char.id}
+              >
                 <div
                   className="col-span-1 flex items-center justify-center cursor-pointer"
                   onClick={() => onClickCharacter(char.id)}

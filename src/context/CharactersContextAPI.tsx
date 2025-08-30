@@ -1,7 +1,9 @@
 "use client"
 
-import { Character, CharactersContextType } from "@/models/globalModel"
-import React, { createContext, useContext, useState, ReactNode } from "react"
+import { Character, CharactersContextType, CharactersResponse } from "@/models/globalModel"
+import { charactersQuery, ENDPOINT } from "@/utils/constants"
+import React, { createContext, useContext, useState, ReactNode, useEffect } from "react"
+import { GraphQLClient } from "graphql-request"
 
 const CharactersContext = createContext<CharactersContextType | undefined>(undefined)
 
@@ -12,6 +14,16 @@ export const CharactersProvider = ({ children }: { children: ReactNode }) => {
   const [filteredSpecie, setFilteredSpecie] = useState<string>("all")
   const [selectedCharacter, setSelectedCharacter] = useState<string | null>("")
   const [filterResult, setFilterResult] = useState<string>("")
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const client = new GraphQLClient(ENDPOINT)
+      const data = await client.request<CharactersResponse>(charactersQuery)
+      const characters = data.characters.results.map((c: Character) => ({ ...c, starred: false }))
+      setCharacters(characters)
+    }
+    fetchData()
+  }, [setCharacters])
 
   return (
     <CharactersContext.Provider
