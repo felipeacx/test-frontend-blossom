@@ -24,11 +24,12 @@ const NavigationBar: React.FC = () => {
     setFilterResult,
     setSelectedCharacter,
     selectedCharacter,
+    sortBy,
   } = useCharacters()
 
   // Memoized filter for non-starred characters
   const memoizedCharacters = useMemo(() => {
-    return characters.filter((char) => {
+    const filteredCharacters = characters.filter((char) => {
       const isNotStarred = !char.starred
       const matchesCharacter =
         filteredCharacter === "all"
@@ -44,11 +45,17 @@ const NavigationBar: React.FC = () => {
         char.name.toLowerCase().includes(filterResult.toLowerCase()) && isNotStarred
       return matchesCharacter && matchesSpecies && matchesSearch
     })
-  }, [characters, filteredCharacter, filteredSpecie, filterResult])
+    if (sortBy === "A-Z") {
+      filteredCharacters.sort((a, b) => a.name.localeCompare(b.name))
+    } else if (sortBy === "Z-A") {
+      filteredCharacters.sort((a, b) => b.name.localeCompare(a.name))
+    }
+    return filteredCharacters
+  }, [characters, filteredCharacter, filteredSpecie, filterResult, sortBy])
 
   // Memoized filter for starred characters
   const memoizedFavouriteCharacters = useMemo(() => {
-    return characters.filter((char) => {
+    const filteredCharacters = characters.filter((char) => {
       const isStarred = char.starred
       const matchesCharacter =
         filteredCharacter === "starred"
@@ -64,7 +71,13 @@ const NavigationBar: React.FC = () => {
         char.name.toLowerCase().includes(filterResult.toLowerCase()) && isStarred
       return matchesCharacter && matchesSpecies && matchesSearch
     })
-  }, [characters, filteredCharacter, filteredSpecie, filterResult])
+    if (sortBy === "A-Z") {
+      filteredCharacters.sort((a, b) => a.name.localeCompare(b.name))
+    } else if (sortBy === "Z-A") {
+      filteredCharacters.sort((a, b) => b.name.localeCompare(a.name))
+    }
+    return filteredCharacters
+  }, [characters, filteredCharacter, filteredSpecie, filterResult, sortBy])
 
   const onClickFilter = () => {
     setShowFilter(!showFilter)
