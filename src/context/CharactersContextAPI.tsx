@@ -10,6 +10,8 @@ export const CharactersProvider = ({ children }: { children: ReactNode }) => {
   const [showFilter, setShowFilter] = useState(false)
   const [filteredCharacter, setFilteredCharacter] = useState<string>("all")
   const [filteredSpecie, setFilteredSpecie] = useState<string>("all")
+  const [selectedCharacter, setSelectedCharacter] = useState<string | null>("")
+  const [filterResult, setFilterResult] = useState<string>("")
 
   return (
     <CharactersContext.Provider
@@ -22,6 +24,10 @@ export const CharactersProvider = ({ children }: { children: ReactNode }) => {
         setFilteredCharacter,
         filteredSpecie,
         setFilteredSpecie,
+        selectedCharacter,
+        setSelectedCharacter,
+        filterResult,
+        setFilterResult,
       }}
     >
       {children}
