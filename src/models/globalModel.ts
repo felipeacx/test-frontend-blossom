@@ -17,6 +17,10 @@ export interface CharactersContextType {
   setFilteredCharacter: (filter: string) => void
   filteredSpecie: string
   setFilteredSpecie: (specie: string) => void
+  selectedCharacter: string | null
+  setSelectedCharacter: (id: string | null) => void
+  filterResult: string
+  setFilterResult: (result: string) => void
 }
 
 export interface CharactersResponse {

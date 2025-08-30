@@ -18,41 +18,50 @@ const NavigationBar: React.FC = () => {
     showFilter,
     filteredCharacter,
     filteredSpecie,
+    filterResult,
+    setFilterResult,
+    setSelectedCharacter,
   } = useCharacters()
 
-  // Memoized filter calculations
+  // Memoized filter for non-starred characters
   const memoizedCharacters = useMemo(() => {
     return characters.filter((char) => {
-      const matchesName =
-        filteredCharacter && filteredCharacter === "all"
-          ? !char.starred
-          : filteredCharacter === "others"
-          ? !char.starred
-          : filteredCharacter === "starred" && char.starred
+      const isNotStarred = !char.starred
+      const matchesCharacter =
+        filteredCharacter === "all"
+          ? isNotStarred
+          : filteredCharacter === "starred"
+          ? false
+          : filteredCharacter === "others" && false
       const matchesSpecies =
-        filteredSpecie && filteredSpecie !== "all"
+        filteredSpecie !== "all"
           ? char.species.toLowerCase().includes(filteredSpecie.toLowerCase())
-          : !char.starred
-      return matchesName && matchesSpecies
+          : true
+      const matchesSearch =
+        char.name.toLowerCase().includes(filterResult.toLowerCase()) && isNotStarred
+      return matchesCharacter && matchesSpecies && matchesSearch
     })
-  }, [characters, filteredCharacter, filteredSpecie])
+  }, [characters, filteredCharacter, filteredSpecie, filterResult])
 
-  // Memoized filter calculations
+  // Memoized filter for starred characters
   const memoizedFavouriteCharacters = useMemo(() => {
     return characters.filter((char) => {
-      const matchesName =
-        filteredCharacter && filteredCharacter === "all"
-          ? char.starred
-          : filteredCharacter === "others"
-          ? !char.starred
-          : filteredCharacter === "starred" && char.starred
+      const isStarred = char.starred
+      const matchesCharacter =
+        filteredCharacter === "starred"
+          ? isStarred
+          : filteredCharacter === "all"
+          ? isStarred
+          : filteredCharacter === "others" && !isStarred
       const matchesSpecies =
-        filteredSpecie && filteredSpecie !== "all"
+        filteredSpecie !== "all"
           ? char.species.toLowerCase().includes(filteredSpecie.toLowerCase())
-          : char.starred
-      return matchesName && matchesSpecies
+          : true
+      const matchesSearch =
+        char.name.toLowerCase().includes(filterResult.toLowerCase()) && isStarred
+      return matchesCharacter && matchesSpecies && matchesSearch
     })
-  }, [characters, filteredCharacter, filteredSpecie])
+  }, [characters, filteredCharacter, filteredSpecie, filterResult])
 
   const onClickFilter = () => {
     setShowFilter(!showFilter)
@@ -64,8 +73,17 @@ const NavigationBar: React.FC = () => {
     )
   }
 
+  const onClickCharacter = (id: string) => {
+    setSelectedCharacter(id)
+  }
+
+  const filterCount =
+    (filteredCharacter !== "all" ? 1 : 0) +
+    (filteredSpecie !== "all" ? 1 : 0) +
+    (filterResult !== "" ? 1 : 0)
+
   return (
-    <nav className="w-1/3 backdrop-blur-lg shadow-lg flex flex-col">
+    <nav className="backdrop-blur-lg shadow-lg flex flex-col col-span-1">
       <div className="flex items-center justify-between px-2 py-4 m-4">
         <div className="text-2xl font-bold flex-1 text-center">Rick and Morty list</div>
       </div>
@@ -75,13 +93,31 @@ const NavigationBar: React.FC = () => {
           type="text"
           className="w-full pl-12 pr-10 py-4 rounded-lg border bg-[#F3F4F6] h-[52px] text-[#6B7280] text-sm leading-5"
           placeholder="Search or filter results"
+          value={filterResult}
+          onChange={(e) => setFilterResult(e.target.value)}
         />
         <PiSliders
           onClick={onClickFilter}
-          className="absolute right-4 top-1/2 -translate-y-1/2 text-2xl text-primary-600 cursor-pointer hover:scale-110 transition-transform duration-200 ease-in-out hover:bg-primary-100 hover:rounded-lg"
+          className={
+            "absolute right-4 top-1/2 -translate-y-1/2 text-2xl text-primary-600 cursor-pointer hover:scale-110 transition-transform duration-200 ease-in-out" +
+            (showFilter && " bg-primary-100 rounded-md")
+          }
         />
         <FilterCharacters />
       </div>
+      {filterCount > 0 && (
+        <div className="flex justify-between items-center px-4">
+          <p className="px-4 text-[#2563EB] font-bold">
+            {memoizedCharacters.length + memoizedFavouriteCharacters.length}{" "}
+            {memoizedCharacters.length + memoizedFavouriteCharacters.length === 1
+              ? " Result"
+              : " Results"}
+          </p>
+          <p className="px-4 font-bold text-[#3B8520] bg-[#63D83833] rounded-lg py-2">
+            {filterCount} {filterCount === 1 ? "Filter" : "Filters"}
+          </p>
+        </div>
+      )}
       <ul className="p-4 grid grid-cols-6 gap-3 overflow-auto max-h-[calc(100svh-180px)]">
         {memoizedFavouriteCharacters.length > 0 && (
           <>
@@ -92,7 +128,10 @@ const NavigationBar: React.FC = () => {
             </li>
             {memoizedFavouriteCharacters.map((char: Character) => (
               <li className="col-span-6 grid grid-cols-6 border-t pt-2 h-[74px]" key={char.id}>
-                <div className="col-span-1 flex items-center justify-center">
+                <div
+                  className="col-span-1 flex items-center justify-center cursor-pointer"
+                  onClick={() => onClickCharacter(char.id)}
+                >
                   <Image
                     className="rounded-3xl"
                     src={char.image}
@@ -101,13 +140,16 @@ const NavigationBar: React.FC = () => {
                     height={32}
                   />
                 </div>
-                <div className="flex items-center justify-start col-span-4">
+                <div
+                  className="flex items-center justify-start col-span-4 cursor-pointer"
+                  onClick={() => onClickCharacter(char.id)}
+                >
                   <div className="flex flex-col">
                     <p className="text-gray-900 font-bold">{char.name}</p>
                     <p className="text-gray-500">{char.species}</p>
                   </div>
                 </div>
-                <div className="col-span-1 flex justify-center items-center">
+                <div className="col-span-1 flex justify-center items-center cursor-pointer">
                   {char.starred ? (
                     <AiFillHeart
                       className="text-4xl text-[#53C629] bg-white rounded-3xl p-1"
@@ -130,7 +172,10 @@ const NavigationBar: React.FC = () => {
             </li>
             {memoizedCharacters.map((char: Character) => (
               <li className="col-span-6 grid grid-cols-6 border-t pt-2 h-[74px]" key={char.id}>
-                <div className="col-span-1 flex items-center justify-center">
+                <div
+                  className="col-span-1 flex items-center justify-center cursor-pointer"
+                  onClick={() => onClickCharacter(char.id)}
+                >
                   <Image
                     className="rounded-3xl"
                     src={char.image}
@@ -139,13 +184,16 @@ const NavigationBar: React.FC = () => {
                     height={32}
                   />
                 </div>
-                <div className="flex items-center justify-start col-span-4">
+                <div
+                  className="flex items-center justify-start col-span-4 cursor-pointer"
+                  onClick={() => onClickCharacter(char.id)}
+                >
                   <div className="flex flex-col">
                     <p className="text-gray-900 font-bold">{char.name}</p>
                     <p className="text-gray-500">{char.species}</p>
                   </div>
                 </div>
-                <div className="col-span-1 flex justify-center items-center">
+                <div className="col-span-1 flex justify-center items-center cursor-pointer">
                   {char.starred ? (
                     <AiFillHeart
                       className="text-4xl text-[#53C629] bg-white rounded-3xl p-1"
