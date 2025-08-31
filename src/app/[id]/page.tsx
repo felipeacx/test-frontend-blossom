@@ -1,24 +1,20 @@
 import Image from "next/image"
-import { AiFillHeart } from "react-icons/ai"
 import { Character, CharacterDetailPageProps, CharactersResponse } from "@/models/globalModel"
 import { GraphQLClient } from "graphql-request"
 import { characterQuery, charactersQuery, ENDPOINT } from "@/utils/constants"
+import CharactersComments from "@/components/CharactersComments"
+import FavouriteCharacter from "@/components/FavouriteCharacter"
+import SoftDeleteCharacter from "@/components/SoftDeleteCharacter"
+import DeletedCharacter from "@/components/DeletedCharacter"
 
-// Generate static params for all character IDs
 export async function generateStaticParams() {
-  try {
-    // Fetch all characters to get their IDs
-    const client = new GraphQLClient(ENDPOINT)
-    const data = await client.request<CharactersResponse>(charactersQuery)
-    const characters = data.characters.results
+  const client = new GraphQLClient(ENDPOINT)
+  const data = await client.request<CharactersResponse>(charactersQuery)
+  const characters = data.characters.results
 
-    return characters.map((char) => ({
-      id: char.id,
-    }))
-  } catch (error) {
-    console.error("Error generating static params:", error)
-    throw new Error(`Characters not found.`)
-  }
+  return characters.map((char) => ({
+    id: char.id,
+  }))
 }
 
 // Function to fetch single character data
@@ -55,9 +51,8 @@ export default async function CharacterDetailPage({ params }: CharacterDetailPag
                 width={75}
                 height={75}
               />
-              {selected.starred && (
-                <AiFillHeart className="absolute left-12 -bottom-2 text-4xl text-[#53C629] bg-white rounded-3xl p-1" />
-              )}
+              <FavouriteCharacter id={selected.id} />
+              <DeletedCharacter id={selected.id} />
             </div>
             <h2 className="text-2xl font-bold">{selected.name}</h2>
             <div>
@@ -74,6 +69,11 @@ export default async function CharacterDetailPage({ params }: CharacterDetailPag
               <p className="text-gray-900 font-bold">Gender</p>
               <p className="text-gray-500">{selected.gender}</p>
             </div>
+            <div>
+              <p className="text-gray-900 font-bold">Comments</p>
+              <CharactersComments id={selected.id} />
+            </div>
+            <SoftDeleteCharacter id={selected.id} />
           </div>
         )}
       </div>

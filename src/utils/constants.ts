@@ -18,7 +18,7 @@ export const charactersQuery = gql`
 `
 
 export const characterQuery = gql`
-  query GetCharacter($id: ID!) {
+  query ($id: ID!) {
     character(id: $id) {
       id
       name
@@ -26,7 +26,6 @@ export const characterQuery = gql`
       species
       status
       gender
-      created
     }
   }
 `
