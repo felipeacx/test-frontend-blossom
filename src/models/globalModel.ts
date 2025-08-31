@@ -6,6 +6,8 @@ export interface Character {
   status: string
   gender: string
   starred?: boolean
+  comments?: string
+  deleted?: boolean
 }
 
 export interface CharactersContextType {
@@ -31,4 +33,22 @@ export interface CharactersResponse {
 
 export interface DetailedViewProps {
   id?: string | string[]
+}
+
+export interface CharacterDetailPageProps {
+  params: {
+    id: string
+  }
+}
+
+export interface CharacterCommentsProps {
+  id: string
+}
+
+export interface FavouriteCharacterProps {
+  id: string
+}
+
+export interface SoftDeleteCharacterProps {
+  id: string
 }
