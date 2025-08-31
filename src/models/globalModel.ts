@@ -32,3 +32,9 @@ export interface CharactersResponse {
 export interface DetailedViewProps {
   id?: string | string[]
 }
+
+export interface CharacterDetailPageProps {
+  params: {
+    id: string
+  }
+}
