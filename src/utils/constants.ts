@@ -16,3 +16,16 @@ export const charactersQuery = gql`
     }
   }
 `
+
+export const characterQuery = gql`
+  query ($id: ID!) {
+    character(id: $id) {
+      id
+      name
+      image
+      species
+      status
+      gender
+    }
+  }
+`
