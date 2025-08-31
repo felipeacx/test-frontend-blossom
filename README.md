@@ -1,36 +1,68 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# test-frontend-blossom
 
-## Getting Started
+Next.js Frontend for managing and viewing characters.
 
-First, run the development server:
+## Requirements
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Node.js (16+ recommended)
+- npm
+- API that provides character data. The app expects an API base URL available at `https://rickandmortyapi.com/documentation/`.
+
+## Setup
+
+Open a terminal (cmd.exe) in the project root (`x:\Dev\NextJS\test-frontend-blossom`) and run:
+
+```cmd
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+```cmd
+npm run dev
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Open `http://localhost:3000/` at browser
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Build & Start (production)
 
-## Learn More
+```cmd
+npm run build
+```
 
-To learn more about Next.js, take a look at the following resources:
+```cmd
+npm start
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Tests
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+```cmd
+npm test
+```
 
-## Deploy on Vercel
+## API
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Common endpoints
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+The aplicattion use this endpoints:
+
+GET /characters
+Description: list characters
+
+GET /characters/:id
+Description: get single character detail
+
+Example character object:
+
+```json
+{
+  "id": "123",
+  "name": "Rick Sanchez"
+}
+```
+
+Functionality
+
+When application loads, characters are retrieved and displayed in NavigationBar
+
+When character is selected, the character is loaded by id and details are displayed
+
+The favorite, comments and soft-delete is managed by CharactersContextAPI
