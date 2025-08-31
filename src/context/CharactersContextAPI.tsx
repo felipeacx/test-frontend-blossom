@@ -20,7 +20,12 @@ export const CharactersProvider = ({ children }: { children: ReactNode }) => {
     const fetchData = async () => {
       const client = new GraphQLClient(ENDPOINT)
       const data = await client.request<CharactersResponse>(charactersQuery)
-      const characters = data.characters.results.map((c: Character) => ({ ...c, starred: false }))
+      const characters = data.characters.results.map((c: Character) => ({
+        ...c,
+        starred: false,
+        comments: "",
+        deleted: false,
+      }))
       setCharacters(characters)
     }
     fetchData()

@@ -173,7 +173,9 @@ const NavigationBar: React.FC = () => {
                   </div>
                 </div>
                 <div className="col-span-1 flex justify-center items-center cursor-pointer">
-                  {char.starred ? (
+                  {char.deleted ? (
+                    <div className="text-red-500 text-sm">Deleted</div>
+                  ) : char.starred ? (
                     <AiFillHeart
                       className="text-4xl text-[#53C629] bg-white rounded-3xl p-1"
                       onClick={() => onHandleFavorite(char.id)}
@@ -223,7 +225,9 @@ const NavigationBar: React.FC = () => {
                   </div>
                 </div>
                 <div className="col-span-1 flex justify-center items-center cursor-pointer">
-                  {char.starred ? (
+                  {char.deleted ? (
+                    <div className="text-red-500 text-sm">Deleted</div>
+                  ) : char.starred ? (
                     <AiFillHeart
                       className="text-4xl text-[#53C629] bg-white rounded-3xl p-1"
                       onClick={() => onHandleFavorite(char.id)}
