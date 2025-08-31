@@ -9,7 +9,8 @@
     "deploy": "gh-pages -d out",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest"
+    "test": "jest",
+    "export": "next build"
   },
   "dependencies": {
     "graphql-request": "^7.2.0",
