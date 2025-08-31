@@ -25,6 +25,10 @@ export interface CharactersContextType {
   setFilterResult: (result: string) => void
   sortBy: string
   setSortBy: (sort: string) => void
+  filteredStatus: string
+  setFilteredStatus: (status: string) => void
+  filteredGender: string
+  setFilteredGender: (gender: string) => void
 }
 
 export interface CharactersResponse {

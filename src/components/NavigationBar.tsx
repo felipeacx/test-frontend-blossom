@@ -25,6 +25,8 @@ const NavigationBar: React.FC = () => {
     setSelectedCharacter,
     selectedCharacter,
     sortBy,
+    filteredStatus,
+    filteredGender,
   } = useCharacters()
 
   // Memoized filter for non-starred characters
@@ -43,7 +45,15 @@ const NavigationBar: React.FC = () => {
           : true
       const matchesSearch =
         char.name.toLowerCase().includes(filterResult.toLowerCase()) && isNotStarred
-      return matchesCharacter && matchesSpecies && matchesSearch
+      const matchesStatus =
+        filteredStatus !== "all"
+          ? char.status.toLowerCase().includes(filteredStatus.toLowerCase())
+          : true
+      const matchesGender =
+        filteredGender !== "all"
+          ? char.gender.toLowerCase().includes(filteredGender.toLowerCase())
+          : true
+      return matchesCharacter && matchesSpecies && matchesSearch && matchesStatus && matchesGender
     })
     if (sortBy === "A-Z") {
       filteredCharacters.sort((a, b) => a.name.localeCompare(b.name))
@@ -51,7 +61,15 @@ const NavigationBar: React.FC = () => {
       filteredCharacters.sort((a, b) => b.name.localeCompare(a.name))
     }
     return filteredCharacters
-  }, [characters, filteredCharacter, filteredSpecie, filterResult, sortBy])
+  }, [
+    characters,
+    filteredCharacter,
+    filteredSpecie,
+    filterResult,
+    sortBy,
+    filteredStatus,
+    filteredGender,
+  ])
 
   // Memoized filter for starred characters
   const memoizedFavouriteCharacters = useMemo(() => {
@@ -69,7 +87,15 @@ const NavigationBar: React.FC = () => {
           : true
       const matchesSearch =
         char.name.toLowerCase().includes(filterResult.toLowerCase()) && isStarred
-      return matchesCharacter && matchesSpecies && matchesSearch
+      const matchesStatus =
+        filteredStatus !== "all"
+          ? char.status.toLowerCase().includes(filteredStatus.toLowerCase())
+          : true
+      const matchesGender =
+        filteredGender !== "all"
+          ? char.gender.toLowerCase().includes(filteredGender.toLowerCase())
+          : true
+      return matchesCharacter && matchesSpecies && matchesSearch && matchesStatus && matchesGender
     })
     if (sortBy === "A-Z") {
       filteredCharacters.sort((a, b) => a.name.localeCompare(b.name))
@@ -77,7 +103,15 @@ const NavigationBar: React.FC = () => {
       filteredCharacters.sort((a, b) => b.name.localeCompare(a.name))
     }
     return filteredCharacters
-  }, [characters, filteredCharacter, filteredSpecie, filterResult, sortBy])
+  }, [
+    characters,
+    filteredCharacter,
+    filteredSpecie,
+    filterResult,
+    sortBy,
+    filteredStatus,
+    filteredGender,
+  ])
 
   const onClickFilter = () => {
     setShowFilter(!showFilter)

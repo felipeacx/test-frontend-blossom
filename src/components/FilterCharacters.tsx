@@ -9,6 +9,10 @@ const FilterCharacters = () => {
     setFilteredSpecie,
     sortBy,
     setSortBy,
+    filteredStatus,
+    setFilteredStatus,
+    filteredGender,
+    setFilteredGender,
   } = useCharacters()
 
   const onClickCharacterFilter = (filter: string) => {
@@ -17,6 +21,14 @@ const FilterCharacters = () => {
 
   const onClickSpecieFilter = (filter: string) => {
     setFilteredSpecie(filter)
+  }
+
+  const onClickStatusFilter = (filter: string) => {
+    setFilteredStatus(filter)
+  }
+
+  const onClickGenderFilter = (filter: string) => {
+    setFilteredGender(filter)
   }
 
   return (
@@ -116,6 +128,68 @@ const FilterCharacters = () => {
               onClick={() => onClickSpecieFilter("alien")}
             >
               Alien
+            </button>
+          </div>
+          <p className="text-gray-500 text-sm leading-5">Status</p>
+          <div className="grid grid-cols-3 gap-3 py-3">
+            <button
+              className={
+                "border rounded-lg px-2 py-4" +
+                (filteredStatus === "all" && " bg-primary-100 text-primary-600 border-primary-100")
+              }
+              onClick={() => onClickStatusFilter("all")}
+            >
+              All
+            </button>
+            <button
+              className={
+                "border rounded-lg px-2 py-4" +
+                (filteredStatus === "alive" &&
+                  " bg-primary-100 text-primary-600 border-primary-100")
+              }
+              onClick={() => onClickStatusFilter("alive")}
+            >
+              Alive
+            </button>
+            <button
+              className={
+                "border rounded-lg px-2 py-4" +
+                (filteredStatus === "dead" && " bg-primary-100 text-primary-600 border-primary-100")
+              }
+              onClick={() => onClickStatusFilter("dead")}
+            >
+              Dead
+            </button>
+          </div>
+          <p className="text-gray-500 text-sm leading-5">Gender</p>
+          <div className="grid grid-cols-3 gap-3 py-3">
+            <button
+              className={
+                "border rounded-lg px-2 py-4" +
+                (filteredGender === "all" && " bg-primary-100 text-primary-600 border-primary-100")
+              }
+              onClick={() => onClickGenderFilter("all")}
+            >
+              All
+            </button>
+            <button
+              className={
+                "border rounded-lg px-2 py-4" +
+                (filteredGender === "male" && " bg-primary-100 text-primary-600 border-primary-100")
+              }
+              onClick={() => onClickGenderFilter("male")}
+            >
+              Male
+            </button>
+            <button
+              className={
+                "border rounded-lg px-2 py-4" +
+                (filteredGender === "female" &&
+                  " bg-primary-100 text-primary-600 border-primary-100")
+              }
+              onClick={() => onClickGenderFilter("female")}
+            >
+              Female
             </button>
           </div>
           <div className="flex justify-center items-center p-4">

@@ -15,6 +15,8 @@ export const CharactersProvider = ({ children }: { children: ReactNode }) => {
   const [selectedCharacter, setSelectedCharacter] = useState<string | null>("")
   const [filterResult, setFilterResult] = useState<string>("")
   const [sortBy, setSortBy] = useState<string>("")
+  const [filteredStatus, setFilteredStatus] = useState<string>("all")
+  const [filteredGender, setFilteredGender] = useState<string>("all")
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,6 +50,10 @@ export const CharactersProvider = ({ children }: { children: ReactNode }) => {
         setFilterResult,
         sortBy,
         setSortBy,
+        filteredStatus,
+        setFilteredStatus,
+        filteredGender,
+        setFilteredGender,
       }}
     >
       {children}
