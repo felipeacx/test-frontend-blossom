@@ -1,5 +1,7 @@
-import DetailedView from "@/components/DetailedView"
+import React from "react"
 
-export default function Home() {
-  return <DetailedView />
+const page = () => {
+  return <div></div>
 }
+
+export default page

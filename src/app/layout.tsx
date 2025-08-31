@@ -19,7 +19,7 @@ const greycliff = localFont({
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es">
-      <body className={`${greycliff.className} bg-white grid grid-cols-3`}>
+      <body className={`${greycliff.className} bg-white grid md:grid-cols-3 grid-cols-1`}>
         <CharactersProvider>
           <NavigationBar />
           {children}

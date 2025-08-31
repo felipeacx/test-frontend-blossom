@@ -6,6 +6,8 @@ import CharactersComments from "@/components/CharactersComments"
 import FavouriteCharacter from "@/components/FavouriteCharacter"
 import SoftDeleteCharacter from "@/components/SoftDeleteCharacter"
 import DeletedCharacter from "@/components/DeletedCharacter"
+import { MdKeyboardBackspace } from "react-icons/md"
+import Link from "next/link"
 
 export async function generateStaticParams() {
   const client = new GraphQLClient(ENDPOINT)
@@ -41,6 +43,9 @@ export default async function CharacterDetailPage({ params }: CharacterDetailPag
   return (
     <main className="flex min-h-screen flex-col items-center justify-between px-24 py-12 col-span-2">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6 w-full">
+        <Link href="/" aria-label="Go back" className="block md:hidden">
+          <MdKeyboardBackspace className="text-4xl text-primary-600 hover:text-primary-700" />
+        </Link>
         {selected && (
           <div className="col-span-2 md:col-span-4 gap-5 flex flex-col">
             <div className="relative flex items-center justify-start">
